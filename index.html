@@ -7,16 +7,15 @@
   <style>
     :root {
       --bg: #0b0d19;
-      --card-bg: rgba(22, 27, 46, 0.92);
+      --card-bg: rgba(22, 27, 46, 0.94);
       --accent-cyan: #00f0ff;
       --accent-pink: #ff007f;
       --accent-yellow: #ffe600;
       --accent-green: #00ff66;
-      --accent-purple: #9d4edd;
       --text: #f0f4fc;
       --text-muted: #8b9bb4;
       --danger: #ff3366;
-      --border-glow: 0 0 20px rgba(0, 240, 255, 0.4);
+      --border-glow: 0 0 20px rgba(0, 240, 255, 0.35);
     }
 
     * {
@@ -56,11 +55,11 @@
 
     .container {
       width: 100%;
-      max-width: 900px;
+      max-width: 920px;
       background: var(--card-bg);
       border: 2px solid rgba(0, 240, 255, 0.35);
       border-radius: 24px;
-      padding: 28px;
+      padding: 26px;
       box-shadow: var(--border-glow), 0 25px 50px rgba(0, 0, 0, 0.7);
       backdrop-filter: blur(14px);
       position: relative;
@@ -146,7 +145,7 @@
       flex: 1;
       justify-content: center;
       align-items: center;
-      padding: 24px 0;
+      padding: 20px 0;
       animation: fadeIn 0.3s ease forwards;
     }
 
@@ -247,9 +246,9 @@
       background: linear-gradient(135deg, var(--accent-cyan), #0077ff);
       color: #070913;
       border: none;
-      padding: 16px 36px;
+      padding: 15px 32px;
       border-radius: 16px;
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       font-weight: 900;
       letter-spacing: 1.5px;
       cursor: pointer;
@@ -277,19 +276,19 @@
       font-size: 1.7rem;
       font-weight: 900;
       text-align: center;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .section-subtitle {
       color: var(--text-muted);
       text-align: center;
       font-size: 0.95rem;
-      margin-bottom: 24px;
+      margin-bottom: 22px;
     }
 
     .grid-modes {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
       gap: 16px;
       width: 100%;
       max-width: 800px;
@@ -353,7 +352,7 @@
       gap: 16px;
       width: 100%;
       max-width: 800px;
-      margin-bottom: 28px;
+      margin-bottom: 26px;
     }
 
     @media (max-width: 700px) {
@@ -397,7 +396,7 @@
     .hard .diff-badge { background: rgba(255, 51, 102, 0.2); color: var(--danger); }
 
     .diff-title {
-      font-size: 1.4rem;
+      font-size: 1.35rem;
       font-weight: 900;
     }
 
@@ -524,12 +523,8 @@
     }
 
     @media (max-width: 600px) {
-      .dance-grid {
-        gap: 8px;
-      }
-      .question-box {
-        font-size: 3rem;
-      }
+      .dance-grid { gap: 8px; }
+      .question-box { font-size: 3rem; }
     }
 
     .dance-pad {
@@ -586,17 +581,17 @@
     /* 5. RESULTS */
     #result-screen {
       text-align: center;
-      max-width: 500px;
+      max-width: 520px;
       margin: auto;
     }
 
     .result-rank-box {
-      font-size: 4rem;
-      margin-bottom: 10px;
+      font-size: 3.8rem;
+      margin-bottom: 6px;
     }
 
     .result-title {
-      font-size: 2.2rem;
+      font-size: 2.1rem;
       font-weight: 900;
       margin-bottom: 6px;
     }
@@ -633,10 +628,10 @@
       border-color: var(--accent-cyan);
     }
 
-    /* 6. LEADERBOARD */
+    /* 6. SECTIONED LEADERBOARD */
     #leaderboard-screen {
       width: 100%;
-      max-width: 780px;
+      max-width: 860px;
       margin: auto;
     }
 
@@ -668,6 +663,34 @@
       border-color: var(--accent-cyan);
       box-shadow: 0 0 12px rgba(0, 240, 255, 0.4);
     }
+
+    .diff-subtabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .diff-subtab {
+      flex: 1;
+      padding: 10px;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      color: var(--text-muted);
+      font-weight: bold;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .diff-subtab.active {
+      color: #0b0d19;
+      font-weight: 900;
+    }
+
+    .diff-subtab.easy.active { background: var(--accent-green); box-shadow: 0 0 10px rgba(0,255,102,0.4); }
+    .diff-subtab.normal.active { background: var(--accent-yellow); box-shadow: 0 0 10px rgba(255,230,0,0.4); }
+    .diff-subtab.hard.active { background: var(--danger); color: #fff; box-shadow: 0 0 10px rgba(255,51,102,0.4); }
 
     .board-table {
       width: 100%;
@@ -912,11 +935,12 @@
       </div>
     </div>
 
-    <!-- 6. LEADERBOARD SCREEN -->
+    <!-- 6. COMPLETELY SECTIONED LEADERBOARD -->
     <div class="screen" id="leaderboard-screen">
       <h2 class="section-title">TOP 10 DANCE HALL</h2>
-      <p class="section-subtitle">Real-time local and classroom rankings</p>
+      <p class="section-subtitle" id="board-view-header">Addition - Easy Ranking</p>
 
+      <!-- Main Mode Tabs -->
       <div class="board-tabs" id="board-tabs">
         <button class="board-tab active" data-board="add">➕ Addition</button>
         <button class="board-tab" data-board="sub">➖ Subtraction</button>
@@ -925,12 +949,18 @@
         <button class="board-tab" data-board="blitz">⚡ Quantum Blitz</button>
       </div>
 
+      <!-- Difficulty Section Tabs (Non-overlapping) -->
+      <div class="diff-subtabs">
+        <div class="diff-subtab easy active" data-subdiff="easy">🟢 Easy (Std 1–2)</div>
+        <div class="diff-subtab normal" data-subdiff="normal">🟡 Normal (Std 3–4)</div>
+        <div class="diff-subtab hard" data-subdiff="hard">🔴 Hard (Std 5–6)</div>
+      </div>
+
       <table class="board-table">
         <thead>
           <tr>
             <th class="rank-cell">RANK</th>
             <th>DANCER</th>
-            <th>DIFFICULTY</th>
             <th>STREAK</th>
             <th style="text-align: right;">SCORE</th>
           </tr>
@@ -988,10 +1018,7 @@
 
   <!-- Core Game Engine -->
   <script>
-    // YOUR GOOGLE SHEETS WEB APP URL
     const GOOGLE_SHEET_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbw2CBIZn8o2SkLq6IOVlZCQKgsi2ohEkiKRU0BcAzZJ6lJZ8yWO_j2aLShg_rXRnnIE/exec";
-
-    // PASSCODE
     const DEFAULT_PASSCODE = 'LKMathbeat';
 
     // Game Variables
@@ -1008,7 +1035,13 @@
     let timerStartTime = 0;
     let timerInterval = null;
     let isGameRunning = false;
+    
+    // Diagnostic mistake log
     let mistakesLog = [];
+
+    // Active Leaderboard View Filter
+    let viewingBoardMode = 'add';
+    let viewingBoardDiff = 'easy';
 
     const DIFF_PROFILES = {
       easy: { start: 5500, min: 2200, step: 150, label: 'Easy (Std 1-2)' },
@@ -1104,7 +1137,7 @@
       });
     });
 
-    /* QUESTION ENGINE */
+    /* QUESTION ENGINE WITH OPERAND DIAGNOSTICS */
     function getRandomInt(min, max) {
       return Math.floor(Math.random() * (max - min + 1)) + min;
     }
@@ -1118,79 +1151,64 @@
 
       let qText = '';
       let answer = 0;
+      let n1 = 0;
+      let n2 = 0;
 
       if (op === 'add') {
         if (currentDiff === 'easy') {
-          const a = getRandomInt(2, 12);
-          const b = getRandomInt(2, 9);
-          answer = a + b;
-          qText = `${a} + ${b}`;
+          n1 = getRandomInt(2, 12);
+          n2 = getRandomInt(2, 9);
         } else if (currentDiff === 'normal') {
-          const a = getRandomInt(11, 45);
-          const b = getRandomInt(8, 38);
-          answer = a + b;
-          qText = `${a} + ${b}`;
+          n1 = getRandomInt(11, 45);
+          n2 = getRandomInt(8, 38);
         } else {
-          const a = getRandomInt(35, 120);
-          const b = getRandomInt(25, 95);
-          answer = a + b;
-          qText = `${a} + ${b}`;
+          n1 = getRandomInt(35, 120);
+          n2 = getRandomInt(25, 95);
         }
+        answer = n1 + n2;
+        qText = `${n1} + ${n2}`;
       } else if (op === 'sub') {
         if (currentDiff === 'easy') {
-          const b = getRandomInt(2, 8);
-          const a = b + getRandomInt(1, 9);
-          answer = a - b;
-          qText = `${a} − ${b}`;
+          n2 = getRandomInt(2, 8);
+          n1 = n2 + getRandomInt(1, 9);
         } else if (currentDiff === 'normal') {
-          const b = getRandomInt(10, 40);
-          const a = b + getRandomInt(10, 50);
-          answer = a - b;
-          qText = `${a} − ${b}`;
+          n2 = getRandomInt(10, 40);
+          n1 = n2 + getRandomInt(10, 50);
         } else {
-          const b = getRandomInt(30, 90);
-          const a = b + getRandomInt(25, 110);
-          answer = a - b;
-          qText = `${a} − ${b}`;
+          n2 = getRandomInt(30, 90);
+          n1 = n2 + getRandomInt(25, 110);
         }
+        answer = n1 - n2;
+        qText = `${n1} − ${n2}`;
       } else if (op === 'mul') {
         if (currentDiff === 'easy') {
-          const tables = [2, 5, 10];
-          const a = tables[Math.floor(Math.random() * tables.length)];
-          const b = getRandomInt(2, 9);
-          answer = a * b;
-          qText = `${a} × ${b}`;
+          const tables = [2, 3, 4, 5, 10];
+          n1 = tables[Math.floor(Math.random() * tables.length)];
+          n2 = getRandomInt(2, 9);
         } else if (currentDiff === 'normal') {
-          const a = getRandomInt(3, 9);
-          const b = getRandomInt(3, 9);
-          answer = a * b;
-          qText = `${a} × ${b}`;
+          n1 = getRandomInt(3, 9);
+          n2 = getRandomInt(3, 9);
         } else {
-          const a = getRandomInt(6, 12);
-          const b = getRandomInt(6, 12);
-          answer = a * b;
-          qText = `${a} × ${b}`;
+          n1 = getRandomInt(6, 12);
+          n2 = getRandomInt(6, 12);
         }
+        answer = n1 * n2;
+        qText = `${n1} × ${n2}`;
       } else if (op === 'div') {
         if (currentDiff === 'easy') {
-          const div = [2, 5, 10][Math.floor(Math.random() * 3)];
-          const ans = getRandomInt(2, 8);
-          const a = div * ans;
-          answer = ans;
-          qText = `${a} ÷ ${div}`;
+          n2 = [2, 5, 10][Math.floor(Math.random() * 3)];
+          answer = getRandomInt(2, 8);
+          n1 = n2 * answer;
         } else if (currentDiff === 'normal') {
-          const div = getRandomInt(3, 9);
-          const ans = getRandomInt(2, 9);
-          const a = div * ans;
-          answer = ans;
-          qText = `${a} ÷ ${div}`;
+          n2 = getRandomInt(3, 9);
+          answer = getRandomInt(2, 9);
+          n1 = n2 * answer;
         } else {
-          const div = getRandomInt(4, 12);
-          const ans = getRandomInt(4, 12);
-          const a = div * ans;
-          answer = ans;
-          qText = `${a} ÷ ${div}`;
+          n2 = getRandomInt(4, 12);
+          answer = getRandomInt(4, 12);
+          n1 = n2 * answer;
         }
+        qText = `${n1} ÷ ${n2}`;
       }
 
       const options = new Set([answer]);
@@ -1202,6 +1220,9 @@
 
       const shuffled = Array.from(options).sort(() => Math.random() - 0.5);
       return {
+        mode: op,
+        num1: n1,
+        num2: n2,
         text: qText + ' = ?',
         answer: answer,
         options: shuffled,
@@ -1303,7 +1324,14 @@
         showJudgment(isQuick ? 'perfect' : 'great');
       } else {
         const chosenAnswer = chosenIdx >= 0 ? currentQuestion.options[chosenIdx] : "Timed Out";
-        mistakesLog.push(`[${currentQuestion.text.replace(' = ?', '')} = ${currentQuestion.answer} (Picked: ${chosenAnswer})]`);
+        mistakesLog.push({
+          mode: currentQuestion.mode,
+          num1: currentQuestion.num1,
+          num2: currentQuestion.num2,
+          text: currentQuestion.text.replace(' = ?', ''),
+          expected: currentQuestion.answer,
+          picked: chosenAnswer
+        });
 
         streak = 0;
         lives--;
@@ -1368,19 +1396,16 @@
       startGame();
     });
 
-    /* LEADERBOARD & GOOGLE SHEETS SYNC */
-    function getBoardKey(mode) {
-      return `math_beat_board_${mode}`;
+    /* COMPLETELY SEPARATED LEADERBOARD KEY SYSTEM */
+    function getBoardKey(mode, diff) {
+      return `math_beat_board_${mode}_${diff}`;
     }
 
-    function loadBoard(mode) {
-      const data = localStorage.getItem(getBoardKey(mode));
+    function loadBoard(mode, diff) {
+      const data = localStorage.getItem(getBoardKey(mode, diff));
       if (!data) {
-        return [
-          { name: 'Lucas T.', diff: 'Std 1-2', streak: 12, score: 1420 },
-          { name: 'Emily C.', diff: 'Std 1-2', streak: 9, score: 980 },
-          { name: 'Kavitha', diff: 'Std 3-4', streak: 7, score: 750 }
-        ];
+        // CLEAN & EMPTY - No fake or sample students
+        return [];
       }
       return JSON.parse(data);
     }
@@ -1391,9 +1416,12 @@
       const saveBtn = document.getElementById('btn-save-score');
 
       const acc = totalQuestions > 0 ? Math.round((correctCount / totalQuestions) * 100) : 0;
-      const mistakesString = mistakesLog.length > 0 ? mistakesLog.join("; ") : "No mistakes (Flawless)";
+      
+      const readableMistakes = mistakesLog.length > 0 
+        ? mistakesLog.map(m => `[${m.text} = ${m.expected} (Picked: ${m.picked})]`).join("; ")
+        : "None (100% Flawless)";
 
-      // Send to Google Sheets Web App
+      // Send to Google Sheets Web App with rich diagnostic data
       if (GOOGLE_SHEET_WEBAPP_URL && GOOGLE_SHEET_WEBAPP_URL.startsWith("http")) {
         saveBtn.textContent = "SAVING...";
         saveBtn.disabled = true;
@@ -1409,7 +1437,8 @@
             score: score,
             accuracy: acc + "%",
             streak: maxStreak,
-            mistakes: mistakesString
+            mistakes: readableMistakes,
+            rawMistakes: mistakesLog // Passed directly for automatic weakness analysis
           })
         }).then(() => {
           saveBtn.textContent = "SAVED! ✅";
@@ -1419,35 +1448,52 @@
         });
       }
 
-      // Save locally
-      const board = loadBoard(currentMode);
+      // Save locally into the strictly separated category
+      const board = loadBoard(currentMode, currentDiff);
       board.push({
         name: name,
-        diff: currentDiff.toUpperCase(),
         streak: maxStreak,
         score: score
       });
       board.sort((a, b) => b.score - a.score);
-      localStorage.setItem(getBoardKey(currentMode), JSON.stringify(board.slice(0, 10)));
+      localStorage.setItem(getBoardKey(currentMode, currentDiff), JSON.stringify(board.slice(0, 10)));
 
       nameInput.value = '';
       setTimeout(() => {
-        renderLeaderboard(currentMode);
+        viewingBoardMode = currentMode;
+        viewingBoardDiff = currentDiff;
+        syncBoardViewTabs();
+        renderLeaderboard();
         showScreen('board');
         saveBtn.textContent = "SAVE SCORE";
         saveBtn.disabled = false;
-      }, 600);
+      }, 500);
     }
 
     document.getElementById('btn-save-score').addEventListener('click', saveScoreToBoard);
 
-    function renderLeaderboard(modeKey) {
-      const board = loadBoard(modeKey);
+    function syncBoardViewTabs() {
+      // Sync Mode Tab
+      document.querySelectorAll('.board-tab').forEach(t => {
+        t.classList.toggle('active', t.getAttribute('data-board') === viewingBoardMode);
+      });
+      // Sync Diff Subtab
+      document.querySelectorAll('.diff-subtab').forEach(t => {
+        t.classList.toggle('active', t.getAttribute('data-subdiff') === viewingBoardDiff);
+      });
+
+      const modeTitle = MODE_NAMES[viewingBoardMode];
+      const diffTitle = DIFF_PROFILES[viewingBoardDiff].label;
+      document.getElementById('board-view-header').textContent = `${modeTitle} ➔ ${diffTitle}`;
+    }
+
+    function renderLeaderboard() {
+      const board = loadBoard(viewingBoardMode, viewingBoardDiff);
       const tbody = document.getElementById('board-rows');
       tbody.innerHTML = '';
 
       if (board.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 20px; color: var(--text-muted);">No records yet for this mode! Be the first!</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 26px; color: var(--text-muted);">No records yet in this category. Play a round to take #1!</td></tr>`;
         return;
       }
 
@@ -1462,29 +1508,44 @@
         tr.innerHTML = `
           <td class="rank-cell ${rankClass}">#${rank}</td>
           <td>${entry.name}</td>
-          <td><span style="font-size:0.75rem; background:rgba(255,255,255,0.08); padding:3px 8px; border-radius:6px;">${entry.diff}</span></td>
-          <td style="color: var(--accent-yellow);">${entry.streak} 🔥</td>
+          <td style="color: var(--accent-yellow); font-weight:900;">${entry.streak} 🔥</td>
           <td style="text-align: right; color: var(--accent-cyan); font-weight:900;">${entry.score.toLocaleString()}</td>
         `;
         tbody.appendChild(tr);
       });
     }
 
+    // Switch between Operation Modes
     document.querySelectorAll('.board-tab').forEach(tab => {
       tab.addEventListener('click', () => {
-        document.querySelectorAll('.board-tab').forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        renderLeaderboard(tab.getAttribute('data-board'));
+        viewingBoardMode = tab.getAttribute('data-board');
+        syncBoardViewTabs();
+        renderLeaderboard();
+      });
+    });
+
+    // Switch between Difficulty Subsections (Easy, Normal, Hard)
+    document.querySelectorAll('.diff-subtab').forEach(subtab => {
+      subtab.addEventListener('click', () => {
+        viewingBoardDiff = subtab.getAttribute('data-subdiff');
+        syncBoardViewTabs();
+        renderLeaderboard();
       });
     });
 
     document.getElementById('btn-show-board').addEventListener('click', () => {
-      renderLeaderboard(currentMode);
+      viewingBoardMode = currentMode;
+      viewingBoardDiff = currentDiff;
+      syncBoardViewTabs();
+      renderLeaderboard();
       showScreen('board');
     });
 
     document.getElementById('btn-view-board-res').addEventListener('click', () => {
-      renderLeaderboard(currentMode);
+      viewingBoardMode = currentMode;
+      viewingBoardDiff = currentDiff;
+      syncBoardViewTabs();
+      renderLeaderboard();
       showScreen('board');
     });
 
