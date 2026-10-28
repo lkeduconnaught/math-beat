@@ -411,7 +411,7 @@
       color: var(--text-muted);
     }
 
-    /* 4. GAMEPLAY */
+    /* 4. GAMEPLAY SCREEN */
     #game-screen {
       padding: 10px 0;
       justify-content: space-between;
@@ -628,7 +628,7 @@
       border-color: var(--accent-cyan);
     }
 
-    /* 6. SECTIONED LEADERBOARD */
+    /* 6. 13 SEPARATE LEADERBOARDS */
     #leaderboard-screen {
       width: 100%;
       max-width: 860px;
@@ -731,7 +731,6 @@
 <body>
 
   <div class="container">
-    <!-- Header -->
     <header>
       <div class="logo">
         <div class="logo-icon">🪩</div>
@@ -810,7 +809,7 @@
           <div class="mode-symbol" style="color: #ff007f;">⚡</div>
           <div>
             <div class="mode-name" style="font-size: 1.3rem;">QUANTUM BLITZ</div>
-            <div class="mode-tag" style="color: #e0e0e0;">Combines ➕, ➖, ✖, and ÷ into an unpredictable dance rush!</div>
+            <div class="mode-tag" style="color: #e0e0e0;">All operations combined into 1 dedicated master leaderboard!</div>
           </div>
         </div>
       </div>
@@ -840,7 +839,7 @@
           <div class="diff-badge">HARD</div>
           <div class="diff-title">Master Blitz</div>
           <div class="diff-rec">Recommended for Std 5 – 6</div>
-          <div class="diff-speed">Starting: 3.0s ➔ Max: 1.0s 🔥</div>
+          <div class="diff-speed">Starting: 4.2s ➔ Max: 1.8s (Extended)</div>
         </div>
       </div>
 
@@ -935,12 +934,12 @@
       </div>
     </div>
 
-    <!-- 6. COMPLETELY SECTIONED LEADERBOARD -->
+    <!-- 6. 13 LEADERBOARDS SCREEN -->
     <div class="screen" id="leaderboard-screen">
       <h2 class="section-title">TOP 10 DANCE HALL</h2>
       <p class="section-subtitle" id="board-view-header">Addition - Easy Ranking</p>
 
-      <!-- Main Mode Tabs -->
+      <!-- Main Tabs (4 Operations + 1 Blitz) -->
       <div class="board-tabs" id="board-tabs">
         <button class="board-tab active" data-board="add">➕ Addition</button>
         <button class="board-tab" data-board="sub">➖ Subtraction</button>
@@ -949,8 +948,8 @@
         <button class="board-tab" data-board="blitz">⚡ Quantum Blitz</button>
       </div>
 
-      <!-- Difficulty Section Tabs (Non-overlapping) -->
-      <div class="diff-subtabs">
+      <!-- Subtabs for Easy, Normal, Hard (Hidden when Blitz is chosen) -->
+      <div class="diff-subtabs" id="diff-subtabs-wrap">
         <div class="diff-subtab easy active" data-subdiff="easy">🟢 Easy (Std 1–2)</div>
         <div class="diff-subtab normal" data-subdiff="normal">🟡 Normal (Std 3–4)</div>
         <div class="diff-subtab hard" data-subdiff="hard">🔴 Hard (Std 5–6)</div>
@@ -1021,6 +1020,16 @@
     const GOOGLE_SHEET_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbw2CBIZn8o2SkLq6IOVlZCQKgsi2ohEkiKRU0BcAzZJ6lJZ8yWO_j2aLShg_rXRnnIE/exec";
     const DEFAULT_PASSCODE = 'LKMathbeat';
 
+    // RESET VERSION TAG: Automatically wipes old sample boards on load
+    const BOARD_VERSION = "v_13_boards_clean_v1";
+    if (localStorage.getItem("math_beat_board_ver") !== BOARD_VERSION) {
+      // Clear previous local mock / sample boards
+      Object.keys(localStorage).forEach(key => {
+        if (key.startsWith("math_beat_board_")) localStorage.removeItem(key);
+      });
+      localStorage.setItem("math_beat_board_ver", BOARD_VERSION);
+    }
+
     // Game Variables
     let currentMode = 'add';
     let currentDiff = 'easy';
@@ -1035,18 +1044,17 @@
     let timerStartTime = 0;
     let timerInterval = null;
     let isGameRunning = false;
-    
-    // Diagnostic mistake log
     let mistakesLog = [];
 
-    // Active Leaderboard View Filter
+    // Active Leaderboard Selected Filters
     let viewingBoardMode = 'add';
     let viewingBoardDiff = 'easy';
 
+    // EXTENDED HARD MODE TIMINGS (More balanced & student-friendly)
     const DIFF_PROFILES = {
       easy: { start: 5500, min: 2200, step: 150, label: 'Easy (Std 1-2)' },
-      normal: { start: 4000, min: 1500, step: 180, label: 'Normal (Std 3-4)' },
-      hard: { start: 3000, min: 1000, step: 200, label: 'Hard (Std 5-6)' }
+      normal: { start: 4000, min: 1500, step: 160, label: 'Normal (Std 3-4)' },
+      hard: { start: 4200, min: 1800, step: 150, label: 'Hard (Std 5-6)' } // Extended from 3.0s/1.0s
     };
 
     const MODE_NAMES = {
@@ -1071,7 +1079,7 @@
       screens[screenKey].classList.add('active');
     }
 
-    /* PASSCODE */
+    /* PASSCODE GATE */
     const gateInput = document.getElementById('gate-pass-input');
     const gateError = document.getElementById('gate-error');
     const btnUnlock = document.getElementById('btn-unlock-gate');
@@ -1117,12 +1125,19 @@
       showScreen('gate');
     });
 
-    /* SELECTIONS */
+    /* SELECTION */
     document.querySelectorAll('.mode-card').forEach(card => {
       card.addEventListener('click', () => {
         currentMode = card.getAttribute('data-mode');
-        document.getElementById('selected-mode-label').textContent = `Mode Selected: ${MODE_NAMES[currentMode]}`;
-        showScreen('diff');
+        
+        // Quantum Blitz directly starts since it represents 1 combined mode
+        if (currentMode === 'blitz') {
+          currentDiff = 'hard'; // Scales dynamically across all 4 operations
+          startGame();
+        } else {
+          document.getElementById('selected-mode-label').textContent = `Mode Selected: ${MODE_NAMES[currentMode]}`;
+          showScreen('diff');
+        }
       });
     });
 
@@ -1137,16 +1152,20 @@
       });
     });
 
-    /* QUESTION ENGINE WITH OPERAND DIAGNOSTICS */
+    /* QUESTION GENERATION */
     function getRandomInt(min, max) {
       return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
     function generateQuestion() {
       let op = currentMode;
+      let effectiveDiff = currentDiff;
+
       if (op === 'blitz') {
         const ops = ['add', 'sub', 'mul', 'div'];
         op = ops[Math.floor(Math.random() * ops.length)];
+        const diffs = ['easy', 'normal', 'hard'];
+        effectiveDiff = diffs[Math.floor(Math.random() * diffs.length)];
       }
 
       let qText = '';
@@ -1155,10 +1174,10 @@
       let n2 = 0;
 
       if (op === 'add') {
-        if (currentDiff === 'easy') {
+        if (effectiveDiff === 'easy') {
           n1 = getRandomInt(2, 12);
           n2 = getRandomInt(2, 9);
-        } else if (currentDiff === 'normal') {
+        } else if (effectiveDiff === 'normal') {
           n1 = getRandomInt(11, 45);
           n2 = getRandomInt(8, 38);
         } else {
@@ -1168,10 +1187,10 @@
         answer = n1 + n2;
         qText = `${n1} + ${n2}`;
       } else if (op === 'sub') {
-        if (currentDiff === 'easy') {
+        if (effectiveDiff === 'easy') {
           n2 = getRandomInt(2, 8);
           n1 = n2 + getRandomInt(1, 9);
-        } else if (currentDiff === 'normal') {
+        } else if (effectiveDiff === 'normal') {
           n2 = getRandomInt(10, 40);
           n1 = n2 + getRandomInt(10, 50);
         } else {
@@ -1181,11 +1200,11 @@
         answer = n1 - n2;
         qText = `${n1} − ${n2}`;
       } else if (op === 'mul') {
-        if (currentDiff === 'easy') {
+        if (effectiveDiff === 'easy') {
           const tables = [2, 3, 4, 5, 10];
           n1 = tables[Math.floor(Math.random() * tables.length)];
           n2 = getRandomInt(2, 9);
-        } else if (currentDiff === 'normal') {
+        } else if (effectiveDiff === 'normal') {
           n1 = getRandomInt(3, 9);
           n2 = getRandomInt(3, 9);
         } else {
@@ -1195,11 +1214,11 @@
         answer = n1 * n2;
         qText = `${n1} × ${n2}`;
       } else if (op === 'div') {
-        if (currentDiff === 'easy') {
+        if (effectiveDiff === 'easy') {
           n2 = [2, 5, 10][Math.floor(Math.random() * 3)];
           answer = getRandomInt(2, 8);
           n1 = n2 * answer;
-        } else if (currentDiff === 'normal') {
+        } else if (effectiveDiff === 'normal') {
           n2 = getRandomInt(3, 9);
           answer = getRandomInt(2, 9);
           n1 = n2 * answer;
@@ -1352,8 +1371,11 @@
       isGameRunning = false;
       clearInterval(timerInterval);
 
-      document.getElementById('res-summary-mode').textContent = 
-        `${MODE_NAMES[currentMode]} (${DIFF_PROFILES[currentDiff].label})`;
+      const summaryText = currentMode === 'blitz' 
+        ? "Quantum Blitz (Master Mode)"
+        : `${MODE_NAMES[currentMode]} (${DIFF_PROFILES[currentDiff].label})`;
+
+      document.getElementById('res-summary-mode').textContent = summaryText;
       document.getElementById('res-score').textContent = score.toLocaleString();
       document.getElementById('res-max-streak').textContent = `${maxStreak} 🔥`;
       
@@ -1396,17 +1418,16 @@
       startGame();
     });
 
-    /* COMPLETELY SEPARATED LEADERBOARD KEY SYSTEM */
+    /* EXACTLY 13 SEPARATE LEADERBOARD KEYS */
+    // 3 Addition + 3 Subtraction + 3 Multiplication + 3 Division + 1 Blitz = 13 Total
     function getBoardKey(mode, diff) {
+      if (mode === 'blitz') return 'math_beat_board_blitz_all';
       return `math_beat_board_${mode}_${diff}`;
     }
 
     function loadBoard(mode, diff) {
       const data = localStorage.getItem(getBoardKey(mode, diff));
-      if (!data) {
-        // CLEAN & EMPTY - No fake or sample students
-        return [];
-      }
+      if (!data) return []; // Clean empty start
       return JSON.parse(data);
     }
 
@@ -1416,12 +1437,11 @@
       const saveBtn = document.getElementById('btn-save-score');
 
       const acc = totalQuestions > 0 ? Math.round((correctCount / totalQuestions) * 100) : 0;
-      
       const readableMistakes = mistakesLog.length > 0 
         ? mistakesLog.map(m => `[${m.text} = ${m.expected} (Picked: ${m.picked})]`).join("; ")
         : "None (100% Flawless)";
 
-      // Send to Google Sheets Web App with rich diagnostic data
+      // Send to Google Sheets Web App
       if (GOOGLE_SHEET_WEBAPP_URL && GOOGLE_SHEET_WEBAPP_URL.startsWith("http")) {
         saveBtn.textContent = "SAVING...";
         saveBtn.disabled = true;
@@ -1433,12 +1453,12 @@
           body: JSON.stringify({
             name: name,
             mode: MODE_NAMES[currentMode],
-            diff: DIFF_PROFILES[currentDiff].label,
+            diff: currentMode === 'blitz' ? 'Master Blitz' : DIFF_PROFILES[currentDiff].label,
             score: score,
             accuracy: acc + "%",
             streak: maxStreak,
             mistakes: readableMistakes,
-            rawMistakes: mistakesLog // Passed directly for automatic weakness analysis
+            rawMistakes: mistakesLog
           })
         }).then(() => {
           saveBtn.textContent = "SAVED! ✅";
@@ -1448,7 +1468,7 @@
         });
       }
 
-      // Save locally into the strictly separated category
+      // Save into the isolated board slot
       const board = loadBoard(currentMode, currentDiff);
       board.push({
         name: name,
@@ -1477,14 +1497,23 @@
       document.querySelectorAll('.board-tab').forEach(t => {
         t.classList.toggle('active', t.getAttribute('data-board') === viewingBoardMode);
       });
-      // Sync Diff Subtab
-      document.querySelectorAll('.diff-subtab').forEach(t => {
-        t.classList.toggle('active', t.getAttribute('data-subdiff') === viewingBoardDiff);
-      });
 
-      const modeTitle = MODE_NAMES[viewingBoardMode];
-      const diffTitle = DIFF_PROFILES[viewingBoardDiff].label;
-      document.getElementById('board-view-header').textContent = `${modeTitle} ➔ ${diffTitle}`;
+      const subtabsWrap = document.getElementById('diff-subtabs-wrap');
+      const headerLabel = document.getElementById('board-view-header');
+
+      // If viewing Blitz: hide the Easy/Normal/Hard subtabs (since Blitz is 1 single board)
+      if (viewingBoardMode === 'blitz') {
+        subtabsWrap.style.display = 'none';
+        headerLabel.textContent = `⚡ Quantum Blitz - Unified Hall of Fame`;
+      } else {
+        subtabsWrap.style.display = 'flex';
+        document.querySelectorAll('.diff-subtab').forEach(t => {
+          t.classList.toggle('active', t.getAttribute('data-subdiff') === viewingBoardDiff);
+        });
+        const modeTitle = MODE_NAMES[viewingBoardMode];
+        const diffTitle = DIFF_PROFILES[viewingBoardDiff].label;
+        headerLabel.textContent = `${modeTitle} ➔ ${diffTitle} Board`;
+      }
     }
 
     function renderLeaderboard() {
@@ -1515,7 +1544,7 @@
       });
     }
 
-    // Switch between Operation Modes
+    // Switch between modes in the Leaderboard
     document.querySelectorAll('.board-tab').forEach(tab => {
       tab.addEventListener('click', () => {
         viewingBoardMode = tab.getAttribute('data-board');
@@ -1524,7 +1553,7 @@
       });
     });
 
-    // Switch between Difficulty Subsections (Easy, Normal, Hard)
+    // Switch between difficulty subtabs (Easy, Normal, Hard)
     document.querySelectorAll('.diff-subtab').forEach(subtab => {
       subtab.addEventListener('click', () => {
         viewingBoardDiff = subtab.getAttribute('data-subdiff');
