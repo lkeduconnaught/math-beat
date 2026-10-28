@@ -44,7 +44,6 @@
       overflow-x: hidden;
     }
 
-    /* Scanlines / Retro Overlay */
     body::after {
       content: " ";
       position: fixed;
@@ -71,7 +70,6 @@
       min-height: 640px;
     }
 
-    /* Header & Bar */
     header {
       display: flex;
       justify-content: space-between;
@@ -142,7 +140,6 @@
       transform: translateY(-2px);
     }
 
-    /* Screen Management */
     .screen {
       display: none;
       flex-direction: column;
@@ -162,7 +159,7 @@
       to { opacity: 1; transform: scale(1); }
     }
 
-    /* PASSCODE GATE SCREEN */
+    /* 1. PASSCODE SCREEN */
     #gate-screen {
       text-align: center;
       max-width: 440px;
@@ -246,7 +243,6 @@
       margin-bottom: 12px;
     }
 
-    /* ACTION BUTTONS */
     .btn-main {
       background: linear-gradient(135deg, var(--accent-cyan), #0077ff);
       color: #070913;
@@ -276,7 +272,7 @@
       transform: translateY(1px);
     }
 
-    /* SELECTION SCREENS */
+    /* 2. MODE SELECTION */
     .section-title {
       font-size: 1.7rem;
       font-weight: 900;
@@ -350,7 +346,7 @@
       color: var(--text-muted);
     }
 
-    /* DIFFICULTY CARDS */
+    /* 3. DIFFICULTY CARDS */
     .grid-diffs {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -416,7 +412,7 @@
       color: var(--text-muted);
     }
 
-    /* GAMEPLAY SCREEN */
+    /* 4. GAMEPLAY */
     #game-screen {
       padding: 10px 0;
       justify-content: space-between;
@@ -456,7 +452,6 @@
       color: var(--accent-yellow);
     }
 
-    /* Beat Timer Gauge */
     .timer-wrap {
       width: 100%;
       height: 14px;
@@ -483,7 +478,6 @@
       background: linear-gradient(90deg, #ff9900, var(--danger));
     }
 
-    /* Dance Target & Question Display */
     .stage-arena {
       display: flex;
       flex-direction: column;
@@ -521,7 +515,6 @@
       text-shadow: 0 0 25px rgba(255, 255, 255, 0.4);
     }
 
-    /* Dance Arrows / Answer Pads */
     .dance-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -585,13 +578,12 @@
       color: var(--text-muted);
     }
 
-    /* Individual Pad Accents */
     .pad-0 .pad-arrow { color: #ff0055; }
     .pad-1 .pad-arrow { color: #00f0ff; }
     .pad-2 .pad-arrow { color: #00ff66; }
     .pad-3 .pad-arrow { color: #ffe600; }
 
-    /* RESULTS SCREEN */
+    /* 5. RESULTS */
     #result-screen {
       text-align: center;
       max-width: 500px;
@@ -641,7 +633,7 @@
       border-color: var(--accent-cyan);
     }
 
-    /* LEADERBOARD SCREEN */
+    /* 6. LEADERBOARD */
     #leaderboard-screen {
       width: 100%;
       max-width: 780px;
@@ -711,51 +703,6 @@
     .rank-1 { color: #ffe600; font-size: 1.1rem; }
     .rank-2 { color: #e0e0e0; font-size: 1.05rem; }
     .rank-3 { color: #cd7f32; font-size: 1rem; }
-
-    /* MODAL POPUPS */
-    .modal-overlay {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.8);
-      backdrop-filter: blur(8px);
-      z-index: 1000;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
-    }
-
-    .modal-overlay.active {
-      display: flex;
-    }
-
-    .modal-box {
-      background: #14192b;
-      border: 2px solid var(--accent-cyan);
-      border-radius: 20px;
-      padding: 24px;
-      width: 100%;
-      max-width: 460px;
-      box-shadow: 0 0 30px rgba(0, 240, 255, 0.3);
-    }
-
-    .modal-title {
-      font-size: 1.3rem;
-      font-weight: 900;
-      margin-bottom: 14px;
-    }
-
-    .modal-close {
-      margin-top: 18px;
-      background: rgba(255, 255, 255, 0.1);
-      border: none;
-      color: #fff;
-      padding: 10px 20px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: bold;
-      width: 100%;
-    }
   </style>
 </head>
 <body>
@@ -777,7 +724,7 @@
       </div>
     </header>
 
-    <!-- 1. PASSCODE GATE SCREEN -->
+    <!-- 1. PASSCODE SCREEN -->
     <div class="screen active" id="gate-screen">
       <div class="gate-badge">CLASSROOM ACCESS</div>
       <h2 class="gate-title">Enter Passcode</h2>
@@ -806,7 +753,7 @@
       </div>
     </div>
 
-    <!-- 2. MODE SELECTION SCREEN -->
+    <!-- 2. MODE SELECTION -->
     <div class="screen" id="mode-screen">
       <h2 class="section-title">STEP 1: CHOOSE BEAT MODE</h2>
       <p class="section-subtitle">Pick the arithmetic discipline you want to master</p>
@@ -846,7 +793,7 @@
       </div>
     </div>
 
-    <!-- 3. DIFFICULTY SELECTION SCREEN -->
+    <!-- 3. DIFFICULTY SELECTION -->
     <div class="screen" id="diff-screen">
       <h2 class="section-title">STEP 2: CHOOSE DIFFICULTY</h2>
       <p class="section-subtitle" id="selected-mode-label">Mode: Addition</p>
@@ -955,7 +902,7 @@
       </div>
 
       <div class="save-form">
-        <input type="text" id="player-name" class="save-input" placeholder="Your Name or Class..." maxlength="16" />
+        <input type="text" id="player-name" class="save-input" placeholder="Your Name or Class..." maxlength="20" />
         <button class="btn-main" id="btn-save-score" style="width: auto; padding: 14px 24px;">SAVE SCORE</button>
       </div>
 
@@ -988,9 +935,7 @@
             <th style="text-align: right;">SCORE</th>
           </tr>
         </thead>
-        <tbody id="board-rows">
-          <!-- Dynamically populated -->
-        </tbody>
+        <tbody id="board-rows"></tbody>
       </table>
 
       <button class="btn-main" id="btn-close-board" style="width: auto; align-self: center;">
@@ -999,7 +944,7 @@
     </div>
   </div>
 
-  <!-- Audio Context Synthesizer -->
+  <!-- Audio Synthesizer -->
   <script>
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     let soundEnabled = true;
@@ -1023,8 +968,8 @@
 
     function soundHit(isPerfect) {
       if (isPerfect) {
-        playTone(523.25, 'triangle', 0.12, 0.25); // C5
-        setTimeout(() => playTone(659.25, 'triangle', 0.18, 0.25), 80); // E5
+        playTone(523.25, 'triangle', 0.12, 0.25);
+        setTimeout(() => playTone(659.25, 'triangle', 0.18, 0.25), 80);
       } else {
         playTone(440, 'sine', 0.1, 0.2);
       }
@@ -1035,19 +980,21 @@
       setTimeout(() => playTone(130, 'sawtooth', 0.3, 0.3), 100);
     }
 
-    // Toggle sound
     document.getElementById('btn-sound').addEventListener('click', () => {
       soundEnabled = !soundEnabled;
       document.getElementById('btn-sound').textContent = soundEnabled ? '🔊' : '🔇';
     });
   </script>
 
-  <!-- Core Game & Passcode Engine -->
+  <!-- Core Game Engine -->
   <script>
-    // PASSCODE SETTING: Default is "LKMathbeat"
+    // YOUR GOOGLE SHEETS WEB APP URL
+    const GOOGLE_SHEET_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbw2CBIZn8o2SkLq6IOVlZCQKgsi2ohEkiKRU0BcAzZJ6lJZ8yWO_j2aLShg_rXRnnIE/exec";
+
+    // PASSCODE
     const DEFAULT_PASSCODE = 'LKMathbeat';
 
-    // Game State
+    // Game Variables
     let currentMode = 'add';
     let currentDiff = 'easy';
     let currentQuestion = null;
@@ -1061,15 +1008,14 @@
     let timerStartTime = 0;
     let timerInterval = null;
     let isGameRunning = false;
+    let mistakesLog = [];
 
-    // Difficulty Timings
     const DIFF_PROFILES = {
       easy: { start: 5500, min: 2200, step: 150, label: 'Easy (Std 1-2)' },
       normal: { start: 4000, min: 1500, step: 180, label: 'Normal (Std 3-4)' },
-      hard: { start: 3000, min: 1000, step: 200, label: 'Hard (Std 5-6)' } // 1.0s max speed!
+      hard: { start: 3000, min: 1000, step: 200, label: 'Hard (Std 5-6)' }
     };
 
-    // Mode Labels
     const MODE_NAMES = {
       add: 'Addition',
       sub: 'Subtraction',
@@ -1078,7 +1024,6 @@
       blitz: 'Quantum Blitz'
     };
 
-    // Screens
     const screens = {
       gate: document.getElementById('gate-screen'),
       mode: document.getElementById('mode-screen'),
@@ -1093,7 +1038,7 @@
       screens[screenKey].classList.add('active');
     }
 
-    /* PASSCODE LOGIC */
+    /* PASSCODE */
     const gateInput = document.getElementById('gate-pass-input');
     const gateError = document.getElementById('gate-error');
     const btnUnlock = document.getElementById('btn-unlock-gate');
@@ -1120,7 +1065,6 @@
       if (e.key === 'Enter') checkPasscode();
     });
 
-    // Eye toggle for password visibility
     btnToggleEye.addEventListener('click', () => {
       if (gateInput.type === 'password') {
         gateInput.type = 'text';
@@ -1131,18 +1075,16 @@
       }
     });
 
-    // Check if session authenticated
     if (sessionStorage.getItem('math_beat_authenticated') === 'true') {
       showScreen('mode');
     }
 
-    // Lock button
     document.getElementById('btn-lock').addEventListener('click', () => {
       sessionStorage.removeItem('math_beat_authenticated');
       showScreen('gate');
     });
 
-    /* MODE & DIFFICULTY SELECTION */
+    /* SELECTIONS */
     document.querySelectorAll('.mode-card').forEach(card => {
       card.addEventListener('click', () => {
         currentMode = card.getAttribute('data-mode');
@@ -1162,7 +1104,7 @@
       });
     });
 
-    /* QUESTION GENERATION */
+    /* QUESTION ENGINE */
     function getRandomInt(min, max) {
       return Math.floor(Math.random() * (max - min + 1)) + min;
     }
@@ -1251,7 +1193,6 @@
         }
       }
 
-      // Generate 3 plausible distractors
       const options = new Set([answer]);
       while (options.size < 4) {
         const offset = getRandomInt(-4, 4);
@@ -1276,6 +1217,7 @@
       correctCount = 0;
       totalQuestions = 0;
       lives = 3;
+      mistakesLog = [];
       isGameRunning = true;
 
       updateHUD();
@@ -1307,7 +1249,6 @@
         document.getElementById(`ans-${i}`).textContent = currentQuestion.options[i];
       }
 
-      // Reset timer bar
       clearInterval(timerInterval);
       timerStartTime = Date.now();
       const bar = document.getElementById('timer-bar');
@@ -1327,7 +1268,7 @@
 
         if (remaining <= 0) {
           clearInterval(timerInterval);
-          handleAnswer(-1); // Time out = Miss
+          handleAnswer(-1);
         }
       }, 30);
     }
@@ -1361,6 +1302,9 @@
         soundHit(isQuick);
         showJudgment(isQuick ? 'perfect' : 'great');
       } else {
+        const chosenAnswer = chosenIdx >= 0 ? currentQuestion.options[chosenIdx] : "Timed Out";
+        mistakesLog.push(`[${currentQuestion.text.replace(' = ?', '')} = ${currentQuestion.answer} (Picked: ${chosenAnswer})]`);
+
         streak = 0;
         lives--;
         soundMiss();
@@ -1396,7 +1340,6 @@
       showScreen('result');
     }
 
-    // Keyboard controls for dance pads (D, F, J, K / Arrow keys / 1, 2, 3, 4)
     window.addEventListener('keydown', (e) => {
       if (!isGameRunning) return;
 
@@ -1414,7 +1357,6 @@
       }
     });
 
-    // Touch / Click on pads
     document.querySelectorAll('.dance-pad').forEach(pad => {
       pad.addEventListener('click', () => {
         const idx = parseInt(pad.getAttribute('data-index'), 10);
@@ -1422,12 +1364,11 @@
       });
     });
 
-    /* REPLAY & RESTART */
     document.getElementById('btn-replay').addEventListener('click', () => {
       startGame();
     });
 
-    /* LEADERBOARD REPOSITORY (Per Method) */
+    /* LEADERBOARD & GOOGLE SHEETS SYNC */
     function getBoardKey(mode) {
       return `math_beat_board_${mode}`;
     }
@@ -1435,7 +1376,6 @@
     function loadBoard(mode) {
       const data = localStorage.getItem(getBoardKey(mode));
       if (!data) {
-        // Mock starter champions
         return [
           { name: 'Lucas T.', diff: 'Std 1-2', streak: 12, score: 1420 },
           { name: 'Emily C.', diff: 'Std 1-2', streak: 9, score: 980 },
@@ -1448,23 +1388,55 @@
     function saveScoreToBoard() {
       const nameInput = document.getElementById('player-name');
       const name = nameInput.value.trim() || 'Anonymous Dancer';
-      const board = loadBoard(currentMode);
+      const saveBtn = document.getElementById('btn-save-score');
 
+      const acc = totalQuestions > 0 ? Math.round((correctCount / totalQuestions) * 100) : 0;
+      const mistakesString = mistakesLog.length > 0 ? mistakesLog.join("; ") : "No mistakes (Flawless)";
+
+      // Send to Google Sheets Web App
+      if (GOOGLE_SHEET_WEBAPP_URL && GOOGLE_SHEET_WEBAPP_URL.startsWith("http")) {
+        saveBtn.textContent = "SAVING...";
+        saveBtn.disabled = true;
+
+        fetch(GOOGLE_SHEET_WEBAPP_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: name,
+            mode: MODE_NAMES[currentMode],
+            diff: DIFF_PROFILES[currentDiff].label,
+            score: score,
+            accuracy: acc + "%",
+            streak: maxStreak,
+            mistakes: mistakesString
+          })
+        }).then(() => {
+          saveBtn.textContent = "SAVED! ✅";
+        }).catch(err => {
+          console.warn("Cloud save error:", err);
+          saveBtn.textContent = "SAVED LOCAL";
+        });
+      }
+
+      // Save locally
+      const board = loadBoard(currentMode);
       board.push({
         name: name,
         diff: currentDiff.toUpperCase(),
         streak: maxStreak,
         score: score
       });
-
-      // Sort descending and keep top 10
       board.sort((a, b) => b.score - a.score);
-      const top10 = board.slice(0, 10);
+      localStorage.setItem(getBoardKey(currentMode), JSON.stringify(board.slice(0, 10)));
 
-      localStorage.setItem(getBoardKey(currentMode), JSON.stringify(top10));
       nameInput.value = '';
-      renderLeaderboard(currentMode);
-      showScreen('board');
+      setTimeout(() => {
+        renderLeaderboard(currentMode);
+        showScreen('board');
+        saveBtn.textContent = "SAVE SCORE";
+        saveBtn.disabled = false;
+      }, 600);
     }
 
     document.getElementById('btn-save-score').addEventListener('click', saveScoreToBoard);
@@ -1498,7 +1470,6 @@
       });
     }
 
-    // Leaderboard Tabs
     document.querySelectorAll('.board-tab').forEach(tab => {
       tab.addEventListener('click', () => {
         document.querySelectorAll('.board-tab').forEach(t => t.classList.remove('active'));
